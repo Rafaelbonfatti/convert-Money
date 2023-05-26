@@ -95,8 +95,8 @@ label{
 
     }
 
-    .currency-value{
+    .currency-value, .currency-value-to-convert{
         font-weight: 700;
         font-size: 20px;
-        color: #777777;
+        color: #555555;
     }
