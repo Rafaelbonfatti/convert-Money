@@ -1,18 +1,17 @@
 const convertButton = document.querySelector(".convert-button");
 const currencySelect = document.querySelector(".currency-select");
 
-function convertValues() {
+const convertValues = async () => {
   const inputCurrencyValue = document.querySelector(".input-currency").value;
-  const currencyVlaueToConvert = document.querySelector(".currency-value-to-convert"); // *!Valor em Real
+  const currencyVlaueToConvert = document.querySelector(  ".currency-value-to-convert" ); // *!Valor em Real
   const currencyVlaueConverted = document.querySelector(".currency-value"); // *Outras moedas
 
+  // * assync await
+  const data = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL").then(response => response.json());
   
-
-  console.log(currencySelect.value);
-  const dolarToday = 5.2;
-  const euroToday = 6.2;
-  const libraToday = 6.2;
-  const bitcoinToday = 133.869;
+  const dolarToday = data.USDBRL.high;
+  const euroToday = data.EURBRL.high;
+  const bitcoinToday =data.BTCBRL.high;
 
   if (currencySelect.value == "dolar") {
     //* Se o select estiver selecionado o valor de dolar, entre aqui
@@ -30,25 +29,18 @@ function convertValues() {
     }).format(inputCurrencyValue / euroToday);
   }
 
-  if (currencySelect.value == "libra") {
-    currencyVlaueConverted.innerHTML = new Intl.NumberFormat("en-UK", {
-      style: "currency",
-      currency: "GBP",
-    }).format(inputCurrencyValue / libraToday);
-  }
-
-  if(currencySelect.value == "bitcoin"){
+  if (currencySelect.value == "bitcoin") {
     currencyVlaueConverted.innerHTML = new Intl.NumberFormat("en-sv", {
-        style: "currency",
-        currency: "BTC",
-    }).format(inputCurrencyValue / bitcoinToday)
+      style: "currency",
+      currency: "BTC",
+    }).format(inputCurrencyValue / bitcoinToday);
   }
 
   currencyVlaueToConvert.innerHTML = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(inputCurrencyValue);
-}
+};
 
 function changeCurrency() {
   const currencyName = document.getElementById("currency-name");
@@ -64,17 +56,11 @@ function changeCurrency() {
     currencyImage.src = "./assets/euro.png";
   }
 
-  if (currencySelect.value == "libra") {
-    currencyName.innerHTML = "Libra";
-    currencyImage.src = "./assets/libra.png";
-  }
-
-  if(currencySelect.value == "bitcoin"){
+  if (currencySelect.value == "bitcoin") {
     currencyName.innerHTML = "Bitcoin";
     currencyImage.src = "./assets/bitcoin.png";
   }
-
-}
+};
 
 currencySelect.addEventListener("change", changeCurrency); // *Trocar de Valor
 convertButton.addEventListener("click", convertValues);
